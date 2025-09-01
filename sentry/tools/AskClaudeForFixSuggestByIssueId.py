@@ -55,7 +55,7 @@ async def ask_claude(req_json: str) -> str:
                 permission_mode="plan",
                 system_prompt="""
                 你需要根据输入的Sentry告警信息：
-                1.分析报错原因
+                1.分析报错所在方法的上下文，并分析报错原因
                 2.具体问题发生在什么服务（如果是调用["hcm-workflow-platform-web","hcm-workflow-platform-core","hcm-workflow-form-platform","hcm-workflow-process-platform""hcm-workflow-platform-access"]服务之外的接口导致的问题，则输出对应的服务）
                 3.可能的修复方案
                 你的最终输出只能是标准的JSON格式

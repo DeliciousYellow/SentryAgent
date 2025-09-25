@@ -79,15 +79,18 @@ async def ask_claude(req_json: str) -> str:
 
         full_text = ""
         print("=== Claude 分析过程开始 ===")
+        
         async for message in client.receive_response():
+            print(f"\n--- Message ---")
+            print(message)
+            print(f"--- End Message ---\n")
+            
             if hasattr(message, 'content'):
                 for block in message.content:
                     if hasattr(block, 'text'):
-                        # 边打印边收集
-                        print("\n")
-                        print(block.text, end='', flush=True)
                         full_text += block.text
-        print("\n=== Claude 分析过程结束 ===")
+        
+        print("=== Claude 分析过程结束 ===")
     print("\n=== Claude 分析结果 ===\n" + full_text)
     return full_text
 

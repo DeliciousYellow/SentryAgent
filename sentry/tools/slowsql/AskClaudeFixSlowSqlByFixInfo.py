@@ -64,15 +64,18 @@ async def ask_claude_fix(fix_info_json: str, worktree_path: str = None) -> str:
 
         full_text = ""
         print("=== Claude 慢SQL优化过程开始 ===")
+        
         async for message in client.receive_response():
+            print(f"\n--- Message ---")
+            print(message)
+            print(f"--- End Message ---\n")
+            
             if hasattr(message, 'content'):
                 for block in message.content:
                     if hasattr(block, 'text'):
-                        # 边打印边收集
-                        print("\n")
-                        print(block.text, end='', flush=True)
                         full_text += block.text
-        print("\n=== Claude 慢SQL优化过程结束 ===")
+        
+        print("=== Claude 慢SQL优化过程结束 ===")
 
     print("\n=== Claude 慢SQL优化结果 ===\n" + full_text)
     return full_text

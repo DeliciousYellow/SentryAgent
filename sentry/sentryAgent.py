@@ -6,8 +6,8 @@ from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-from sentry.tools.AskClaudeForFixSuggestByIssueId import askClaudeForFixSuggestByIssueIdTool
-from sentry.tools.SubmitMergeRequestByFixSuggest import submitMergeRequestByFixSuggestTool
+from sentry.tools.issue.AskClaudeForFixSuggestByIssueId import askClaudeForFixSuggestByIssueIdTool
+from sentry.tools.issue.SubmitMergeRequestByFixSuggest import submitMergeRequestByFixSuggestTool
 
 load_dotenv()
 base_url = "https://api.deepseek.com"

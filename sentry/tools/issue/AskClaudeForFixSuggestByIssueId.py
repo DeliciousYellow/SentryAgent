@@ -6,7 +6,7 @@ from typing import Optional
 from claude_code_sdk import ClaudeSDKClient, ClaudeCodeOptions
 from langchain_core.tools import Tool
 
-from sentry.tools.SearchSentryInfoByIssueId import search_sentry_json_by_issue_id
+from sentry.tools.issue.SearchSentryInfoByIssueId import search_sentry_json_by_issue_id
 
 
 def askClaudeForFixSuggestByIssueId(issue_id, max_retries: int = 1) -> Optional[dict]:

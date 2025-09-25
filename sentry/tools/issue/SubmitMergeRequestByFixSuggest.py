@@ -5,7 +5,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import gitlab
 from langchain_core.tools import Tool
-from sentry.tools.AskClaudeFixCodeFileByFixInfo import askClaudeFixCodeFileByFixInfo
+from sentry.tools.issue.AskClaudeFixCodeFileByFixInfo import askClaudeFixCodeFileByFixInfo
 
 
 class BuildPullRequest:
@@ -255,13 +255,13 @@ class BuildPullRequest:
             print(f"[错误] 清理 worktree 出错: {e}")
 
 
-def submitMergeRequestForOptimizeSlowSqlByFixSuggest(input_json):
+def submitMergeRequestByFixSuggest(input_json):
     """
     :param input_json:{
         need_fix_project_name
         new_branch_name
         base_branch_name
-        fix_info
+        fix_info -> 调用askClaudeForFixSuggestByIssueIdTool的返回结果
     }
     :return: mr_url
     """
@@ -340,9 +340,9 @@ def submitMergeRequestForOptimizeSlowSqlByFixSuggest(input_json):
             print(f"[警告] 清理 worktree 失败: {cleanup_error}")
 
 
-submitMergeRequestForOptimizeSlowSqlByFixSuggestTool = Tool(
-    name="submitMergeRequestForOptimizeSlowSqlByFixSuggestTool",
-    func=submitMergeRequestForOptimizeSlowSqlByFixSuggest,
+submitMergeRequestByFixSuggestTool = Tool(
+    name="submitMergeRequestByFixSuggestTool",
+    func=submitMergeRequestByFixSuggest,
     description="根据修复建议提交MR"
 )
 
@@ -359,6 +359,6 @@ if __name__ == "__main__":
         }
     }
     """
-    mr_url = submitMergeRequestForOptimizeSlowSqlByFixSuggest(input_json)
-    print("submitMergeRequestForOptimizeSlowSqlByFixSuggestTool返回结果：\n")
+    mr_url = submitMergeRequestByFixSuggest(input_json)
+    print("submitMergeRequestByFixSuggestTool返回结果：\n")
     print(mr_url)

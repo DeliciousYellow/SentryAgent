@@ -2,7 +2,7 @@ import asyncio
 from typing import Optional
 
 from claude_code_sdk import ClaudeSDKClient, ClaudeCodeOptions
-from langchain_core.tools import Tool
+from langchain_core.tools import BaseTool, Tool
 
 
 def askClaudeFixSlowSqlByFixInfo(fix_info_json: str, worktree_path: str) -> Optional[dict]:

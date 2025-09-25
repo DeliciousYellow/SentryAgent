@@ -2,10 +2,12 @@ import json
 import os
 import subprocess
 from pathlib import Path
-from dotenv import load_dotenv
+
 import gitlab
+from dotenv import load_dotenv
 from langchain_core.tools import Tool
-from sentry.tools.AskClaudeFixCodeFileByFixInfo import askClaudeFixCodeFileByFixInfo
+
+from sentry.tools.slowsql.AskClaudeFixSlowSqlByFixInfo import askClaudeFixSlowSqlByFixInfo
 
 
 class BuildPullRequest:
@@ -255,13 +257,13 @@ class BuildPullRequest:
             print(f"[错误] 清理 worktree 出错: {e}")
 
 
-def submitMergeRequestByFixSuggest(input_json):
+def submitMergeRequestForOptimizeSlowSqlByFixSuggest(input_json):
     """
     :param input_json:{
         need_fix_project_name
         new_branch_name
         base_branch_name
-        fix_info -> 调用askClaudeForFixSuggestByIssueIdTool的返回结果
+        fix_info
     }
     :return: mr_url
     """
@@ -298,7 +300,7 @@ def submitMergeRequestByFixSuggest(input_json):
         fix_info_json = json.dumps(fix_info, ensure_ascii=False)
         worktree_path = str(pr_builder.worktree_path)
 
-        askClaudeFixCodeFileByFixInfo(fix_info_json, worktree_path)
+        askClaudeFixSlowSqlByFixInfo(fix_info_json, worktree_path)
         print(f"[成功] Claude已完成代码修复")
 
         # 3. 提交和推送
@@ -340,9 +342,9 @@ def submitMergeRequestByFixSuggest(input_json):
             print(f"[警告] 清理 worktree 失败: {cleanup_error}")
 
 
-submitMergeRequestByFixSuggestTool = Tool(
-    name="submitMergeRequestByFixSuggestTool",
-    func=submitMergeRequestByFixSuggest,
+submitMergeRequestForOptimizeSlowSqlByFixSuggestTool = Tool(
+    name="submitMergeRequestForOptimizeSlowSqlByFixSuggestTool",
+    func=submitMergeRequestForOptimizeSlowSqlByFixSuggest,
     description="根据修复建议提交MR"
 )
 
@@ -359,6 +361,6 @@ if __name__ == "__main__":
         }
     }
     """
-    mr_url = submitMergeRequestByFixSuggest(input_json)
-    print("submitMergeRequestByFixSuggestTool返回结果：\n")
+    mr_url = submitMergeRequestForOptimizeSlowSqlByFixSuggest(input_json)
+    print("submitMergeRequestForOptimizeSlowSqlByFixSuggestTool返回结果：\n")
     print(mr_url)

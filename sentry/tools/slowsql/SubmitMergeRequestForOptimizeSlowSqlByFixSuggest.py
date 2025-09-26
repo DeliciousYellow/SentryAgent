@@ -206,6 +206,20 @@ class BuildPullRequest:
     def create_merge_request(self, title, description="", target_branch="main"):
         """创建合并请求"""
         try:
+            # 先检查是否已经存在相同source_branch的MR
+            existing_mrs = self.project.mergerequests.list(
+                source_branch=self.new_branch,
+                target_branch=target_branch,
+                state='opened'
+            )
+            
+            if existing_mrs:
+                existing_mr = existing_mrs[0]
+                print(f"[信息] 发现已存在的MR: {existing_mr.web_url}")
+                print(f"[信息] MR状态: {existing_mr.state}")
+                return existing_mr.web_url
+            
+            # 创建新的MR
             mr = self.project.mergerequests.create({
                 'source_branch': self.new_branch,
                 'target_branch': target_branch,
